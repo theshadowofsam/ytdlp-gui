@@ -5,12 +5,15 @@ dlw.py
 
 gui for dlp.py
 """
+from multiprocessing import Process
 import tkinter as tk
 import dlp
 
 class DLP():
     def __init__(self):
         self.window = tk.Tk()
+        self.dl = None
+        self.is_downloading = False
 
 
     def draw(self):
@@ -37,12 +40,27 @@ class DLP():
 
         
     def download(self):
+        if self.is_downloading:
+            return
         url = self.entry_main.get()
-        dl = dlp.start([url])
-        if dl != 0:
-            self.label_main['text'] = 'ERROR'
+        self.dl = Process(target=dlp.start, args=([url],), daemon=False)
+        self.dl.start()
+        self.is_downloading = True
+        self.label_main['text'] = "Downloading..."
+        self.window.after(150, self.downloading)
+        # self.dl = dlp.start([url])
+
+
+    def downloading(self):
+        if self.is_downloading:
+            if self.dl.exitcode == None:
+                self.window.after(150, self.downloading)
+                return
+            else:
+                self.label_main['text'] = "Done!"
+                self.is_downloading = False
         else:
-            self.label_main['text'] = 'DONE!'
+            return
 
 
     def run(self):
