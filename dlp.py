@@ -1,3 +1,10 @@
+"""
+Samuel Lee
+dlp.py
+1/3/2022
+
+utilizes yt-dlp to download youtube videos and process them to mp3's
+"""
 from yt_dlp import YoutubeDL
 from requests import get
 from multiprocessing import Pool
