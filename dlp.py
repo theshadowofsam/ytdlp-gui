@@ -22,14 +22,18 @@ def download(url):
 
 
 def start(urls):
-    todo = []
-    for url in urls:
-        if url.startswith("https://www.youtube.com/watch?v="):
-            todo.append(url)
-    print("begin")
-    with Pool() as p:
-        p.map(download, todo)
-    print("end")
+    try:
+        todo = []
+        for url in urls:
+            if url.startswith("https://www.youtube.com/watch?v="):
+                todo.append(url)
+        with Pool() as p:
+            p.map(download, todo)
+    except:
+        return 1
+    else:
+        return 0
+
 
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
